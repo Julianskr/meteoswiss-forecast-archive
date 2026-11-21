@@ -33,4 +33,3 @@ Each file contains weather predictions, forecast run timestamps, retrieval times
 ## Data Privacy
 
 This repository contains publicly available weather forecasts only.
-No confidential ASGAL measurement data or API credentials are included.

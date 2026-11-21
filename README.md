@@ -1,198 +1,99 @@
-# \# MeteoSwiss Forecast Archive
+# MeteoSwiss Forecast Archive
 
-# 
+Automated collection and archiving of MeteoSwiss weather forecasts for **Vilters, Switzerland**.
 
-# Automated collection and archiving of MeteoSwiss weather forecasts for \*\*Vilters, Switzerland\*\*.
+This repository supports a Master's thesis.
 
-# 
+## 1. Data Source
 
-# This repository supports a Master's thesis investigating day-ahead and intraday photovoltaic (PV) feed-in forecasting, with particular emphasis on weather-related forecast errors and the effects of fog and low cloud cover.
+- **Provider:** Federal Office of Meteorology and Climatology MeteoSwiss
+- **Dataset:** Local Forecast Data (E4)
+- **Location:** Vilters, Switzerland
+- **Point ID:** `732400`
+- **Point Type ID:** `2` (postal-code forecast location)
+- **Forecast resolution:** Hourly
+- **Format:** Compressed CSV (`.csv.gz`)
 
-# 
+Official documentation: [MeteoSwiss Local Forecast Data](https://opendatadocs.meteoswiss.ch/e-forecast-data/e4-local-forecast-data)
 
-# \## 1. Data Source
+## 2. Collected Weather Parameters
 
-# 
+| Parameter | Description |
+|---|---|
+| `nprolohs` | Low cloud cover |
+| `gre000h0` | Global solar radiation |
+| `sre000h0` | Sunshine duration |
+| `ods000h0` | Diffuse solar radiation |
+| `tre200h0` | Air temperature |
+| `jww003i0` | Weather-type code, including fog and low stratus |
 
-# \- \*\*Provider:\*\* Federal Office of Meteorology and Climatology MeteoSwiss
+The weather-type parameter is particularly relevant for investigating fog (*Nebel*) and low stratus (*Hochnebel*).
 
-# \- \*\*Dataset:\*\* Local Forecast Data (E4)
+**Note:** Weather-type codes represent predicted conditions, not actual meteorological observations.
 
-# \- \*\*Location:\*\* Vilters, Switzerland
+## 3. Automated Collection
 
-# \- \*\*Point ID:\*\* `732400`
+The collector is implemented in Python (`collect_meteoswiss.py`).
 
-# \- \*\*Point Type ID:\*\* `2` (postal-code forecast location)
+GitHub Actions automatically runs the collector every hour. The script:
 
-# \- \*\*Forecast resolution:\*\* Hourly
+1. Retrieves available forecast runs from the MeteoSwiss STAC catalogue.
+2. Identifies runs containing all required weather parameters.
+3. Downloads the corresponding forecast data.
+4. Extracts the records for Vilters.
+5. Combines the weather parameters by forecast validity timestamp.
+6. Saves each new forecast run as a compressed CSV file.
 
-# \- \*\*Format:\*\* Compressed CSV (`.csv.gz`)
+Previously archived files are skipped to prevent accidental overwriting.
 
-# 
+The collection can also be triggered manually using GitHub Actions.
 
-# Official documentation: \[MeteoSwiss Local Forecast Data](https://opendatadocs.meteoswiss.ch/e-forecast-data/e4-local-forecast-data)
+## 4. Archive Structure
 
-# 
+Forecasts are stored according to their run timestamps:
 
-# \## 2. Collected Weather Parameters
+`archive/YYYY/MM/YYYYMMDDHHMM_vilters.csv.gz`
 
-# 
+Each archived file contains:
 
-# | Parameter | Description |
+- `valid_at_utc`: Forecast validity timestamp
+- Weather parameters: Predicted meteorological conditions
+- `run_at_utc`: Nominal forecast run timestamp
+- `retrieved_at_utc`: Timestamp when the file was collected
+- `point_id` and `point_type_id`: Location identifiers
+- `source`: Data provider
 
-# |---|---|
+### Archive Version Note
 
-# | `nprolohs` | Low cloud cover |
+The weather-type parameter `jww003i0` was added on **21 November 2026**.
 
-# | `gre000h0` | Global solar radiation |
+Earlier archived forecasts contain five weather parameters. Newly collected forecast runs contain all six.
 
-# | `sre000h0` | Sunshine duration |
+Existing archives are preserved without modification.
 
-# | `ods000h0` | Diffuse solar radiation |
+## 5. Research Considerations
 
-# | `tre200h0` | Air temperature |
+These data support research into:
 
-# | `jww003i0` | Weather-type code, including fog and low stratus |
+- Day-ahead and intraday PV feed-in forecasting
+- Forecast accuracy under different weather conditions
+- Fog and low-stratus prediction
+- Rapid changes in solar radiation and cloud cover
 
-# 
+Forecast runs must be evaluated chronologically. Predictions should only be used when they would have been available at the relevant forecast issuance time.
 
-# The weather-type parameter is particularly relevant for investigating fog (\*Nebel\*) and low stratus (\*Hochnebel\*).
+The nominal forecast run timestamp is not necessarily identical to the actual publication or availability time.
 
-# 
+## 6. Data Privacy and Attribution
 
-# \*\*Note:\*\* Weather-type codes represent predicted conditions, not actual meteorological observations.
+This repository contains **publicly available MeteoSwiss weather forecast data only**.
 
-# 
+It does not contain confidential measurement data, electricity consumption data or proprietary datasets.
 
-# \## 3. Automated Collection
+**Data source:** Federal Office of Meteorology and Climatology MeteoSwiss.
 
-# 
+## 7. Project Status
 
-# The collector is implemented in Python (`collect\_meteoswiss.py`).
+The collection is operational and configured to run automatically through GitHub Actions.
 
-# 
-
-# GitHub Actions automatically runs the collector every hour. The script:
-
-# 
-
-# 1\. Retrieves available forecast runs from the MeteoSwiss STAC catalogue.
-
-# 2\. Identifies runs containing all required weather parameters.
-
-# 3\. Downloads the corresponding forecast data.
-
-# 4\. Extracts the records for Vilters.
-
-# 5\. Combines the weather parameters by forecast validity timestamp.
-
-# 6\. Saves each new forecast run as a compressed CSV file.
-
-# 
-
-# Previously archived files are skipped to prevent accidental overwriting.
-
-# 
-
-# The collection can also be triggered manually using GitHub Actions.
-
-# 
-
-# \## 4. Archive Structure
-
-# 
-
-# Forecasts are stored according to their run timestamps:
-
-# 
-
-# `archive/YYYY/MM/YYYYMMDDHHMM\_vilters.csv.gz`
-
-# 
-
-# Each archived file contains:
-
-# 
-
-# \- `valid\_at\_utc`: Forecast validity timestamp
-
-# \- Weather parameters: Predicted meteorological conditions
-
-# \- `run\_at\_utc`: Nominal forecast run timestamp
-
-# \- `retrieved\_at\_utc`: Timestamp when the file was collected
-
-# \- `point\_id` and `point\_type\_id`: Location identifiers
-
-# \- `source`: Data provider
-
-# 
-
-# \### Archive Version Note
-
-# 
-
-# The weather-type parameter `jww003i0` was added on \*\*21 November 2026\*\*.
-
-# 
-
-# Earlier archived forecasts contain five weather parameters. Newly collected forecast runs contain all six.
-
-# 
-
-# Existing archives are preserved without modification.
-
-# 
-
-# \## 5. Research Considerations
-
-# 
-
-# These data support research into:
-
-# 
-
-# \- Day-ahead and intraday PV feed-in forecasting
-
-# \- Forecast accuracy under different weather conditions
-
-# \- Fog and low-stratus prediction
-
-# \- Rapid changes in solar radiation and cloud cover
-
-# 
-
-# Forecast runs must be evaluated chronologically. Predictions should only be used when they would have been available at the relevant forecast issuance time.
-
-# 
-
-# The nominal forecast run timestamp is not necessarily identical to the actual publication or availability time.
-
-# 
-
-# \## 6. Data Privacy and Attribution
-
-# 
-
-# This repository contains \*\*publicly available MeteoSwiss weather forecast data only\*\*.
-
-# 
-
-# It does not contain confidential measurement data, electricity consumption data or proprietary datasets from the Master's thesis practice partner.
-
-# 
-
-# \*\*Data source:\*\* Federal Office of Meteorology and Climatology MeteoSwiss.
-
-# 
-
-# \## 7. Project Status
-
-# 
-
-# The collection is operational and configured to run automatically through GitHub Actions.
-
-# 
-
-# The archive is intended to grow over time and provide a reproducible historical record of meteorological forecasts for PV forecasting research.
-
+The archive is intended to grow over time and provide a reproducible historical record of meteorological forecasts.

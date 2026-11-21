@@ -21,6 +21,7 @@ PARAMETERS = [
     "sre000h0",  # Sunshine duration
     "ods000h0",  # Diffuse radiation
     "tre200h0",  # Air temperature
+    "jww003i0",  # Weather type (includes fog/low stratus codes)
 ]
 
 BASE_URL = "https://data.geo.admin.ch/api/stac/v1"

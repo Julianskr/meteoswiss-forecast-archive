@@ -1,4 +1,3 @@
-
 # MeteoSwiss Forecast Archive
 
 Automated collection and archiving of MeteoSwiss weather forecasts for Vilters, Switzerland.
@@ -7,22 +6,23 @@ This repository supports research on photovoltaic (PV) feed-in forecasting and w
 
 ## Data Source
 
-- Provider: Federal Office of Meteorology and Climatology MeteoSwiss
-- Dataset: Local Forecast Data (E4)
-- Location: Vilters, Switzerland
-- Point ID: 732400
-- Forecast resolution: Hourly
+* Provider: Federal Office of Meteorology and Climatology MeteoSwiss
+* Dataset: Local Forecast Data (E4)
+* Location: Vilters, Switzerland
+* Point ID: 732400
+* Forecast resolution: Hourly
 
 Source documentation:
 https://opendatadocs.meteoswiss.ch/e-forecast-data/e4-local-forecast-data
 
 ## Weather Parameters
 
-- nprolohs: Low cloud cover
-- gre000h0: Global solar radiation
-- sre000h0: Sunshine duration
-- ods000h0: Diffuse solar radiation
-- tre200h0: Air temperature
+* nprolohs: Low cloud cover
+* gre000h0: Global solar radiation
+* sre000h0: Sunshine duration
+* ods000h0: Diffuse solar radiation
+* tre200h0: Air temperature
+* jww003i0: Weather-type code, including fog and low stratus
 
 ## Archive
 
@@ -33,3 +33,4 @@ Each file contains weather predictions, forecast run timestamps, retrieval times
 ## Data Privacy
 
 This repository contains publicly available weather forecasts only.
+

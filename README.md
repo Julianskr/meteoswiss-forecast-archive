@@ -76,9 +76,6 @@ Existing archives are preserved without modification.
 These data support research into:
 
 - Day-ahead and intraday PV feed-in forecasting
-- Forecast accuracy under different weather conditions
-- Fog and low-stratus prediction
-- Rapid changes in solar radiation and cloud cover
 
 Forecast runs must be evaluated chronologically. Predictions should only be used when they would have been available at the relevant forecast issuance time.
 
@@ -87,8 +84,6 @@ The nominal forecast run timestamp is not necessarily identical to the actual pu
 ## 6. Data Privacy and Attribution
 
 This repository contains **publicly available MeteoSwiss weather forecast data only**.
-
-It does not contain confidential measurement data, electricity consumption data or proprietary datasets.
 
 **Data source:** Federal Office of Meteorology and Climatology MeteoSwiss.
 
